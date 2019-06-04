@@ -54,6 +54,19 @@ fdescribe('HeroService', () => {
       req.flush(mockHeroes);
     });
 
+    it('should NOT return mock heroes if server returns a 404', () => {
+      service.getHeroes().subscribe(
+        heroes => expect(heroes.length).toEqual(0),
+        fail
+      );
+      // Receive GET request
+      const req = httpTestingController.expectOne(service.heroesUrl);
+      req.error(new ErrorEvent('ERROR_LOADING_HEROES'));
+      expect(req.request.method).toEqual('GET');
+      // Verify there are no outstanding requests
+      httpTestingController.verify();
+    });
+
   });
 
 });
