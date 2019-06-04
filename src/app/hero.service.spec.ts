@@ -44,8 +44,7 @@ fdescribe('HeroService', () => {
 
     it('should return mock heroes', () => {
       service.getHeroes().subscribe(
-        heroes => expect(heroes.length).toEqual(mockHeroes.length),
-        fail
+        heroes => expect(heroes.length).toEqual(mockHeroes.length)
       );
       // Receive GET request
       const req = httpTestingController.expectOne(service.heroesUrl);
@@ -56,8 +55,7 @@ fdescribe('HeroService', () => {
 
     it('should NOT return mock heroes if server returns a 404', () => {
       service.getHeroes().subscribe(
-        heroes => expect(heroes.length).toEqual(0),
-        fail
+        heroes => expect(heroes.length).toEqual(0)
       );
       // Receive GET request
       const req = httpTestingController.expectOne(service.heroesUrl);
