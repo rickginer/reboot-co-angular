@@ -15,7 +15,7 @@ fdescribe('HeroService', () => {
   let service;
   let httpTestingController: HttpTestingController;
 
-  let mockHeroes, mockHero;
+  let mockHeroes, mockHero, mockID;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,6 +34,7 @@ fdescribe('HeroService', () => {
   beforeEach(() => {
     mockHeroes = [...mockData];
     mockHero = mockHeroes[0];
+    mockID = mockHero.id;
   });
 
   it('should be created', () => {
@@ -67,6 +68,21 @@ fdescribe('HeroService', () => {
     });
 
   });
+  
+  describe('getHero', () => {
+
+    it('should get hero', () => {
+      service.getHero(mockID).subscribe(
+        response => expect(response).toEqual(mockHero)
+      );
+      // Receive GET request
+      const req = httpTestingController.expectOne(`${service.heroesUrl}/${mockID}`);
+      // Respond with the updated hero
+      req.flush(mockHero);
+      expect(req.request.method).toEqual('GET');
+    });
+
+  });
 
   describe('updateHero', () => {
 
@@ -80,6 +96,7 @@ fdescribe('HeroService', () => {
       req.flush(mockHero);
       expect(req.request.method).toEqual('PUT');
     });
+    
   });
 
 });
