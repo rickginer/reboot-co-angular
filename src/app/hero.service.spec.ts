@@ -99,6 +99,22 @@ describe('HeroService', () => {
 
   });
 
+  describe('addHero', () => {
+
+    it('should add hero', () => {
+      service.addHero(mockHero).subscribe(
+        response => expect(response).toEqual(mockHero)
+      );
+      // Receive POST request
+      const req = httpTestingController.expectOne(service.heroesUrl);
+      // Respond with the updated hero
+      req.flush(mockHero);
+      expect(req.request.method).toEqual('POST');
+      expect(req.request.body).toEqual(mockHero);
+    });
+
+  });
+
   describe('deleteHero', () => {
 
     it('should delete hero using id', () => {
@@ -124,7 +140,6 @@ describe('HeroService', () => {
     });
 
   });
-
 
   describe('searchHeroes', () => {
 
