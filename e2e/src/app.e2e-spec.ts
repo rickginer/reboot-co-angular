@@ -8,6 +8,13 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
+
+  it('should redirect to dashboard', async () => {
+    page.navigateTo();
+    const url = await browser.getCurrentUrl();
+    expect(url).toContain('/dashboard');
+  });
+
   it('should display welcome message', () => {
     page.navigateTo();
     expect(page.getTitleText()).toEqual('Tour of Heroes');
