@@ -48,9 +48,9 @@ fdescribe('HeroService', () => {
       );
       // Receive GET request
       const req = httpTestingController.expectOne(service.heroesUrl);
-      expect(req.request.method).toEqual('GET');
       // Respond with the mock heroes
       req.flush(mockHeroes);
+      expect(req.request.method).toEqual('GET');
     });
 
     it('should NOT return mock heroes if server returns a 404', () => {
