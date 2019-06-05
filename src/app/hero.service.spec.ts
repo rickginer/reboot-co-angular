@@ -15,7 +15,7 @@ fdescribe('HeroService', () => {
   let service;
   let httpTestingController: HttpTestingController;
 
-  let mockHeroes, mockHero, mockID;
+  let mockHeroes, mockHero, mockId;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,7 +34,7 @@ fdescribe('HeroService', () => {
   beforeEach(() => {
     mockHeroes = [...mockData];
     mockHero = mockHeroes[0];
-    mockID = mockHero.id;
+    mockId = mockHero.id;
   });
 
   it('should be created', () => {
@@ -72,11 +72,11 @@ fdescribe('HeroService', () => {
   describe('getHero', () => {
 
     it('should get hero', () => {
-      service.getHero(mockID).subscribe(
+      service.getHero(mockId).subscribe(
         response => expect(response).toEqual(mockHero)
       );
       // Receive GET request
-      const req = httpTestingController.expectOne(`${service.heroesUrl}/${mockID}`);
+      const req = httpTestingController.expectOne(`${service.heroesUrl}/${mockId}`);
       // Respond with the updated hero
       req.flush(mockHero);
       expect(req.request.method).toEqual('GET');
@@ -96,7 +96,33 @@ fdescribe('HeroService', () => {
       req.flush(mockHero);
       expect(req.request.method).toEqual('PUT');
     });
-    
+
+  });
+
+  describe('deleteHero', () => {
+
+    it('should delete hero using id', () => {
+      service.deleteHero(mockId).subscribe(
+        response => expect(response).toEqual(mockId)
+      );
+      // Receive DELETE request
+      const req = httpTestingController.expectOne(`${service.heroesUrl}/${mockId}`);
+      // Respond with the updated hero
+      req.flush(mockId);
+      expect(req.request.method).toEqual('DELETE');
+    });
+
+    it('should delete hero using hero object', () => {
+      service.deleteHero(mockHero).subscribe(
+        response => expect(response).toEqual(mockHero.id)
+      );
+      // Receive DELETE request
+      const req = httpTestingController.expectOne(`${service.heroesUrl}/${mockHero.id}`);
+      // Respond with the updated hero
+      req.flush(mockHero.id);
+      expect(req.request.method).toEqual('DELETE');
+    });
+
   });
 
 });
