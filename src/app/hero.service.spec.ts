@@ -10,7 +10,7 @@ const mockData = [
   { id: 3, name: 'Iron Man'}
 ] as Hero[];
 
-fdescribe('HeroService', () => {
+describe('HeroService', () => {
 
   let service;
   let httpTestingController: HttpTestingController;
@@ -121,6 +121,43 @@ fdescribe('HeroService', () => {
       // Respond with the updated hero
       req.flush(mockHero.id);
       expect(req.request.method).toEqual('DELETE');
+    });
+
+  });
+
+
+  describe('searchHeroes', () => {
+
+    it('should return empty result set if nothing passed in and not call API', () => {
+      const searchTerm = '';
+      service.searchHeroes(searchTerm).subscribe(
+        response => expect(response).toEqual([])
+      );
+      const req = httpTestingController.expectNone(`${service.heroesUrl}/?name=${searchTerm}`);
+    });
+
+    it('should return array of heroes if partial match on multiple heroes', () => {
+      const searchTerm = 'h';
+      service.searchHeroes(searchTerm).subscribe(
+        response => expect(response).toEqual(mockHeroes.slice(0,1))
+      );
+      // Receive GET request
+      const req = httpTestingController.expectOne(`${service.heroesUrl}/?name=${searchTerm}`);
+      // Respond with the updated hero
+      req.flush(mockHeroes.slice(0,1));
+      expect(req.request.method).toEqual('GET');
+    });
+
+    it('should return single item if complete match', () => {
+      const searchTerm = mockHero.name;
+      service.searchHeroes(searchTerm).subscribe(
+        response => expect(response).toEqual(mockHero)
+      );
+      // Receive GET request
+      const req = httpTestingController.expectOne(`${service.heroesUrl}/?name=${searchTerm}`);
+      // Respond with the updated hero
+      req.flush(mockHero);
+      expect(req.request.method).toEqual('GET');
     });
 
   });
